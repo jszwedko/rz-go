@@ -38,6 +38,7 @@ type Event struct {
 	formatter            LogFormatter
 	timestampFunc        func() time.Time
 	encoder              Encoder
+	overwritableFields   map[string]Field
 }
 
 func putEvent(e *Event) {
@@ -87,6 +88,13 @@ func (e *Event) Append(fields ...Field) {
 	for i := range fields {
 		fields[i](e)
 	}
+}
+
+func (e *Event) overwritable(key string, field Field) {
+	if e.overwritableFields == nil {
+		e.overwritableFields = make(map[string]Field)
+	}
+	e.overwritableFields[key] = field
 }
 
 // Fields returns the fields from the event.

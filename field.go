@@ -54,6 +54,17 @@ func String(key, value string) Field {
 	}
 }
 
+// Overwritable adds a new field, but does not resolve it until the event is logged.
+//
+// Adding another Overwritable field with the same key will cause the previous one to be dropped.
+//
+// Typically the `key` will match the `key` passed to the method creating `Field`, but does not have to.
+func Overwritable(key string, field Field) Field {
+	return func(e *Event) {
+		e.overwritable(key, field)
+	}
+}
+
 // Strings adds the field key with vals as a []string to the *Event context.
 func Strings(key string, value []string) Field {
 	return func(e *Event) {

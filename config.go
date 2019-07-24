@@ -60,6 +60,7 @@ func Fields(fields ...Field) LoggerOption {
 		for i := range fields {
 			fields[i](e)
 		}
+		logger.overwritableFields = e.overwritableFields
 		if e.stack != logger.stack {
 			logger.stack = e.stack
 		}

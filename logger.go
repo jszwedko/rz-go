@@ -37,6 +37,7 @@ type Logger struct {
 	timestampFunc        func() time.Time
 	contextMutext        *sync.Mutex
 	encoder              Encoder
+	overwritableFields   map[string]Field
 }
 
 // New creates a root logger with given options. If the output writer implements
@@ -178,6 +179,9 @@ func (l *Logger) logEvent(level LogLevel, message string, done func(string), fie
 	for i := range fields {
 		fields[i](e)
 	}
+	for i := range e.overwritableFields {
+		e.overwritableFields[i](e)
+	}
 
 	writeEvent(e, message, done)
 }
@@ -290,4 +294,5 @@ func copyInternalLoggerFieldsToEvent(l *Logger, e *Event) {
 	e.formatter = l.formatter
 	e.timestampFunc = l.timestampFunc
 	e.encoder = l.encoder
+	e.overwritableFields = l.overwritableFields
 }
