@@ -179,8 +179,8 @@ func (l *Logger) logEvent(level LogLevel, message string, done func(string), fie
 	for i := range fields {
 		fields[i](e)
 	}
-	for i := range e.overwritableFields {
-		e.overwritableFields[i](e)
+	for key := range e.overwritableFields {
+		e.overwritableFields[key](e)
 	}
 
 	writeEvent(e, message, done)
